@@ -47,8 +47,9 @@ export function ProductCategoriesSection() {
                         Nuestra Producción
                     </span>
                     <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mb-4">
-                        Productos Artesanos
+                        Formatos para Cada Cliente
                     </h2>
+
                     <p className="text-stone-500 text-sm max-w-lg mx-auto">
                         Elaboramos una gama completa de productos lácteos manchegos,
                         disponibles en múltiples formatos para cada necesidad.

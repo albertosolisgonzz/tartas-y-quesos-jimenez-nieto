@@ -5,6 +5,8 @@ import { Hero } from "@/components/home/Hero";
 import { ProductCategoriesSection } from "@/components/home/ProductCategoriesSection";
 import { InnovationBanner } from "@/components/home/InnovationBanner";
 
+
+
 export default async function Home() {
   const products = await getAllProducts();
 
@@ -38,6 +40,7 @@ export default async function Home() {
 
       {/* Unified Product Categories + Formats Section */}
       <ProductCategoriesSection />
+
 
       {/* Innovation Banner */}
       <InnovationBanner />
