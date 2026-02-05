@@ -53,17 +53,18 @@ export function Navbar() {
 
                     {/* Logo */}
                     <div className="flex-1 flex justify-center relative h-14 md:h-16">
-                        <Link href="/" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <Link href="/" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
                             <Image
                                 src="/images/logo-jimenez-nieto.png"
                                 alt="Jimenez Nieto - Tartas y Quesos"
                                 width={300}
                                 height={150}
-                                className="h-24 md:h-32 w-auto object-contain"
+                                className="h-[72px] md:h-[80px] w-auto object-contain max-w-none"
                                 priority
                             />
                         </Link>
                     </div>
+
 
 
 
