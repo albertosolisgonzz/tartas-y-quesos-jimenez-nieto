@@ -57,13 +57,14 @@ export function Navbar() {
                             <Image
                                 src="/images/logo-jimenez-nieto.png"
                                 alt="Jimenez Nieto - Tartas y Quesos"
-                                width={400}
-                                height={200}
-                                className="h-28 md:h-40 w-auto object-contain max-w-none"
+                                width={200}
+                                height={100}
+                                className="h-12 md:h-14 w-auto object-contain"
                                 priority
                             />
                         </Link>
                     </div>
+
 
                     {/* Actions */}
                     <div className="flex items-center justify-end gap-2 flex-1">
