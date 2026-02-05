@@ -29,10 +29,10 @@ export function Navbar() {
     return (
         <>
             <header
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || !isHome ? 'bg-white/95 backdrop-blur-md border-b border-stone-100 py-1' : 'bg-transparent py-2'
+                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || !isHome ? 'bg-white/95 backdrop-blur-md border-b border-stone-100' : 'bg-transparent'
                     }`}
             >
-                <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
+                <div className="container mx-auto px-4 md:px-8 flex items-center justify-between h-20 md:h-24">
                     {/* Mobile Menu & Search */}
                     <div className="flex items-center gap-4 flex-1">
                         <button
@@ -52,18 +52,19 @@ export function Navbar() {
                     </div>
 
                     {/* Logo */}
-                    <div className="flex-1 flex justify-center relative h-14 md:h-16">
-                        <Link href="/" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+                    <div className="flex-1 flex justify-center relative h-full py-1">
+                        <Link href="/" className="relative h-full w-auto aspect-[2/1] flex items-center justify-center">
                             <Image
                                 src="/images/logo-jimenez-nieto.png"
                                 alt="Jimenez Nieto - Tartas y Quesos"
-                                width={300}
-                                height={150}
-                                className="h-[72px] md:h-[80px] w-auto object-contain max-w-none"
+                                fill
+                                className="object-contain"
+                                sizes="(max-width: 768px) 160px, 200px"
                                 priority
                             />
                         </Link>
                     </div>
+
 
 
 
