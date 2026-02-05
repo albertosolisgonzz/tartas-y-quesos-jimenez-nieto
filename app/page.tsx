@@ -36,6 +36,9 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Formats Section */}
+      <FormatsSection />
+
       {/* Nuestra Tienda - Location Section */}
       <section className="py-10 md:py-16 bg-stone-50">
         <div className="container mx-auto px-4 md:px-6">
@@ -89,9 +92,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* Formats Section */}
-      <FormatsSection />
     </div>
   );
 }
