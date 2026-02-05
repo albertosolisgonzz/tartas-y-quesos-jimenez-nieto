@@ -112,10 +112,26 @@ export async function getProductsByCategory(categorySlug: string): Promise<Norma
     }
 
     const allProducts = await getAllProducts();
-    return allProducts.filter(p =>
-        p.productType.toLowerCase() === category.productType.toLowerCase()
-    );
+
+    // Keywords to match for each category
+    const keywords: Record<string, string[]> = {
+        'tartas': ['tarta', 'tartas', 'cake', 'cheesecake'],
+        'quesos': ['queso', 'quesos', 'cheese'],
+        'cremas': ['crema', 'cremas', 'cream', 'untable'],
+    };
+
+    const categoryKeywords = keywords[categorySlug] || [category.productType.toLowerCase()];
+
+    return allProducts.filter(p => {
+        const titleLower = p.title.toLowerCase();
+        const productTypeLower = p.productType?.toLowerCase() || '';
+
+        // Match if productType matches OR title contains any keyword
+        return productTypeLower === category.productType.toLowerCase() ||
+            categoryKeywords.some(keyword => titleLower.includes(keyword));
+    });
 }
+
 
 export async function getAvailableCategories(): Promise<{ slug: string; label: string; count: number }[]> {
     const allProducts = await getAllProducts();
