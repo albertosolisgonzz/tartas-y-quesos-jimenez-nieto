@@ -1,7 +1,6 @@
 'use client';
 
-import { Utensils, Calendar, Users, Briefcase, ChevronRight, Info } from 'lucide-react';
-import { useState } from 'react';
+import { Utensils, Calendar, Users, Briefcase } from 'lucide-react';
 
 const formats = [
     {

@@ -3,11 +3,6 @@ import Client from 'shopify-buy';
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
 const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 
-console.log('=== SHOPIFY CONFIG ===');
-console.log('Domain:', domain);
-console.log('Token exists:', !!storefrontAccessToken);
-console.log('Token (first 10 chars):', storefrontAccessToken?.substring(0, 10));
-
 // Only create client if credentials exist
 export const shopifyClient = domain && storefrontAccessToken
     ? Client.buildClient({
@@ -16,8 +11,6 @@ export const shopifyClient = domain && storefrontAccessToken
         apiVersion: '2024-10',
     })
     : null;
-
-console.log('Shopify client created:', !!shopifyClient);
 
 // Type for normalized product
 export type NormalizedProduct = {
@@ -76,20 +69,18 @@ function normalizeProduct(product: any): NormalizedProduct {
 export async function getAllProducts(): Promise<NormalizedProduct[]> {
     // Use mock data if no client configured
     if (!shopifyClient) {
-        console.log('Using mock products (no Shopify credentials)');
         return MOCK_PRODUCTS;
     }
 
     try {
-        console.log('Fetching products from Shopify...');
         const products = await shopifyClient.product.fetchAll();
-        console.log(`Fetched ${products.length} products`);
         return products.map(normalizeProduct);
     } catch (error) {
         console.error('Error fetching products from Shopify:', error);
         return MOCK_PRODUCTS;
     }
 }
+
 
 export async function getProductByHandle(handle: string): Promise<NormalizedProduct | null> {
     if (!shopifyClient) {
