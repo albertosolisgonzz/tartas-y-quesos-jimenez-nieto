@@ -57,13 +57,15 @@ export function Navbar() {
                             <Image
                                 src="/images/logo-jimenez-nieto.png"
                                 alt="Jimenez Nieto - Tartas y Quesos"
-                                width={200}
-                                height={100}
-                                className="h-12 md:h-14 w-auto object-contain"
+                                width={300}
+                                height={150}
+                                className="h-24 md:h-32 w-auto object-contain"
                                 priority
                             />
                         </Link>
                     </div>
+
+
 
 
                     {/* Actions */}
