@@ -1,12 +1,26 @@
 'use client';
 
 import { useCart } from './CartContext';
-import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { X, Minus, Plus, ShoppingBag, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 
 export function CartDrawer() {
-    const { isCartOpen, toggleCart, cart, removeFromCart, checkoutUrl, itemCount } = useCart();
+    const {
+        isCartOpen,
+        toggleCart,
+        cart,
+        removeFromCart,
+        updateQuantity,
+        proceedToCheckout,
+        isLoading,
+        itemCount,
+        cartTotal
+    } = useCart();
+
+    const handleCheckout = async () => {
+        await proceedToCheckout();
+    };
 
     return (
         <AnimatePresence>
@@ -68,11 +82,21 @@ export function CartDrawer() {
                                                 </div>
                                                 <p className="text-xs text-stone-500 mb-4">Cantidad: {item.quantity}</p>
                                                 <div className="flex items-center justify-between">
-                                                    {/* Quantity Controls Mock */}
+                                                    {/* Quantity Controls */}
                                                     <div className="flex items-center border border-stone-200">
-                                                        <button className="p-1 hover:bg-stone-50"><Minus className="w-3 h-3 text-stone-400" /></button>
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                            className="p-1 hover:bg-stone-50"
+                                                        >
+                                                            <Minus className="w-3 h-3 text-stone-400" />
+                                                        </button>
                                                         <span className="px-2 text-xs text-stone-600">{item.quantity}</span>
-                                                        <button className="p-1 hover:bg-stone-50"><Plus className="w-3 h-3 text-stone-400" /></button>
+                                                        <button
+                                                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                            className="p-1 hover:bg-stone-50"
+                                                        >
+                                                            <Plus className="w-3 h-3 text-stone-400" />
+                                                        </button>
                                                     </div>
                                                     <button
                                                         onClick={() => removeFromCart(item.id)}
@@ -92,20 +116,26 @@ export function CartDrawer() {
                         {cart.length > 0 && (
                             <div className="p-6 border-t border-stone-100 bg-stone-50">
                                 <div className="flex justify-between mb-4 text-stone-900 font-bold">
-                                    <span>Total Estimate</span>
-                                    <span>
-                                        {cart.reduce((acc, item) => acc + (parseFloat(item.price) * item.quantity), 0).toFixed(2)} EUR
-                                    </span>
+                                    <span>Total Estimado</span>
+                                    <span>{cartTotal} EUR</span>
                                 </div>
                                 <p className="text-xs text-stone-500 mb-6 text-center">
                                     Impuestos y envío calculados al finalizar la compra.
                                 </p>
-                                <a
-                                    href={checkoutUrl || '#'}
-                                    className="block w-full bg-stone-900 text-white text-center py-4 uppercase tracking-widest text-xs font-bold hover:bg-stone-800 transition-colors"
+                                <button
+                                    onClick={handleCheckout}
+                                    disabled={isLoading}
+                                    className="block w-full bg-stone-900 text-white text-center py-4 uppercase tracking-widest text-xs font-bold hover:bg-stone-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    Proceder al Pago
-                                </a>
+                                    {isLoading ? (
+                                        <span className="flex items-center justify-center gap-2">
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Procesando...
+                                        </span>
+                                    ) : (
+                                        'Proceder al Pago'
+                                    )}
+                                </button>
                             </div>
                         )}
                     </motion.div>
