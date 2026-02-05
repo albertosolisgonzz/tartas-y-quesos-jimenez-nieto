@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Hero } from "@/components/home/Hero";
 import { FormatsSection } from "@/components/home/FormatsSection";
+import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
+import { InnovationBanner } from "@/components/home/InnovationBanner";
 
 export default async function Home() {
   const products = await getAllProducts();
@@ -36,8 +38,14 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* What We Do Section */}
+      <WhatWeDoSection />
+
       {/* Formats Section */}
       <FormatsSection />
+
+      {/* Innovation Banner */}
+      <InnovationBanner />
 
       {/* Nuestra Tienda - Location Section */}
       <section className="py-10 md:py-16 bg-stone-50">
