@@ -5,7 +5,9 @@ import { Footer } from "@/components/layout/Footer";
 import { CartProvider } from "@/components/cart/CartContext";
 import { CartDrawer } from "@/components/cart/CartDrawer";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
+import { CookieBanner } from "@/components/legal/CookieBanner";
 import "./globals.css";
+
 
 const playfair = Playfair_Display({
   variable: "--font-serif",
@@ -41,7 +43,9 @@ export default function RootLayout({
           </main>
           <Footer />
           <WhatsAppWidget />
+          <CookieBanner />
         </CartProvider>
+
 
       </body>
     </html>

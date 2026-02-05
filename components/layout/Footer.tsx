@@ -20,40 +20,54 @@ export function Footer() {
                         <ul className="space-y-4 text-sm text-stone-600">
                             <li><Link href="/collections/tartas" className="hover:text-stone-900 transition-colors">Tartas de Queso</Link></li>
                             <li><Link href="/collections/quesos" className="hover:text-stone-900 transition-colors">Quesos Curados</Link></li>
-                            <li><Link href="/collections/novedades" className="hover:text-stone-900 transition-colors">Novedades</Link></li>
+                            <li><Link href="/collections/cremas" className="hover:text-stone-900 transition-colors">Cremas de Queso</Link></li>
+                            <li><Link href="/collections/all" className="hover:text-stone-900 transition-colors">Todos los Productos</Link></li>
                         </ul>
                     </div>
 
                     {/* Links 2 */}
                     <div>
-                        <h4 className="font-serif text-sm font-bold tracking-widest mb-6 uppercase">Nosotros</h4>
+                        <h4 className="font-serif text-sm font-bold tracking-widest mb-6 uppercase">Información</h4>
                         <ul className="space-y-4 text-sm text-stone-600">
-                            <li><Link href="/about" className="hover:text-stone-900 transition-colors">La Historia</Link></li>
-                            <li><Link href="/contact" className="hover:text-stone-900 transition-colors">Contacto</Link></li>
-                            <li><Link href="/faq" className="hover:text-stone-900 transition-colors">Envíos y Devoluciones</Link></li>
+                            <li><Link href="/about" className="hover:text-stone-900 transition-colors">Sobre Nosotros</Link></li>
+                            <li><Link href="/legal/envios" className="hover:text-stone-900 transition-colors">Envíos y Devoluciones</Link></li>
+                            <li><Link href="/legal/privacidad" className="hover:text-stone-900 transition-colors">Política de Privacidad</Link></li>
+                            <li><Link href="/legal/cookies" className="hover:text-stone-900 transition-colors">Política de Cookies</Link></li>
                         </ul>
                     </div>
 
-                    {/* Newsletter */}
+                    {/* Contact */}
                     <div>
-                        <h4 className="font-serif text-sm font-bold tracking-widest mb-6 uppercase">Newsletter</h4>
-                        <p className="text-stone-600 text-sm mb-4">Suscríbete para recibir novedades exclusivas.</p>
-                        <form className="flex border-b border-stone-300 pb-2">
-                            <input
-                                type="email"
-                                placeholder="Tu correo electrónico"
-                                className="bg-transparent w-full focus:outline-none text-stone-900 placeholder-stone-400 text-sm"
-                            />
-                            <button className="text-xs uppercase tracking-widest font-bold hover:text-stone-500">Enviar</button>
-                        </form>
+                        <h4 className="font-serif text-sm font-bold tracking-widest mb-6 uppercase">Contacto</h4>
+                        <ul className="space-y-3 text-sm text-stone-600">
+                            <li>Pl. Pilar, 2</li>
+                            <li>13120 Porzuna, Ciudad Real</li>
+                            <li className="pt-2">
+                                <a href="mailto:info@jimeneznieto.es" className="hover:text-stone-900 transition-colors">
+                                    info@jimeneznieto.es
+                                </a>
+                            </li>
+                        </ul>
+                        <div className="flex gap-4 mt-6">
+                            <a href="#" className="text-stone-400 hover:text-stone-900 transition-colors" aria-label="Instagram">
+                                <Instagram className="w-5 h-5" />
+                            </a>
+                            <a href="#" className="text-stone-400 hover:text-stone-900 transition-colors" aria-label="Facebook">
+                                <Facebook className="w-5 h-5" />
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div className="border-t border-stone-200 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-xs text-stone-500 tracking-wide">© 2026 Tartas y Quesos Jimenez Nieto.</p>
-                    <div className="flex gap-6">
-                        <a href="#" className="text-stone-400 hover:text-stone-900 transition-colors"><Instagram className="w-5 h-5" /></a>
-                        <a href="#" className="text-stone-400 hover:text-stone-900 transition-colors"><Facebook className="w-5 h-5" /></a>
+                {/* Bottom bar */}
+                <div className="border-t border-stone-200 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                    <p className="text-xs text-stone-500 tracking-wide">
+                        © 2026 Tartas y Quesos Jimenez Nieto. Todos los derechos reservados.
+                    </p>
+                    <div className="flex gap-6 text-xs text-stone-400">
+                        <Link href="/legal/privacidad" className="hover:text-stone-600 transition-colors">Privacidad</Link>
+                        <Link href="/legal/cookies" className="hover:text-stone-600 transition-colors">Cookies</Link>
+                        <Link href="/legal/envios" className="hover:text-stone-600 transition-colors">Envíos</Link>
                     </div>
                 </div>
             </div>
