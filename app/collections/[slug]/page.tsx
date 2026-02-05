@@ -1,5 +1,5 @@
 import { getProductsByCategory, CATEGORIES } from '@/lib/shopify';
-import { ProductGrid } from '@/components/products/ProductGrid';
+import { ProductGrid } from '@/components/shop/ProductGrid';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
