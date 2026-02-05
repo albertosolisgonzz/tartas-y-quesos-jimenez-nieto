@@ -113,24 +113,39 @@ export async function getProductsByCategory(categorySlug: string): Promise<Norma
 
     const allProducts = await getAllProducts();
 
-    // Keywords to match for each category
-    const keywords: Record<string, string[]> = {
-        'tartas': ['tarta', 'tartas', 'cake', 'cheesecake'],
-        'quesos': ['queso', 'quesos', 'cheese'],
-        'cremas': ['crema', 'cremas', 'cream', 'untable'],
+    // Keywords to match for each category (include/exclude)
+    const keywords: Record<string, { include: string[]; exclude: string[] }> = {
+        'tartas': {
+            include: ['tarta', 'tartas', 'cake', 'cheesecake'],
+            exclude: []
+        },
+        'quesos': {
+            include: ['queso', 'quesos', 'cheese'],
+            exclude: ['crema', 'cremas', 'tarta', 'tartas']
+        },
+        'cremas': {
+            include: ['crema', 'cremas', 'cream', 'untable'],
+            exclude: []
+        },
     };
 
-    const categoryKeywords = keywords[categorySlug] || [category.productType.toLowerCase()];
+    const config = keywords[categorySlug] || { include: [category.productType.toLowerCase()], exclude: [] };
 
     return allProducts.filter(p => {
         const titleLower = p.title.toLowerCase();
         const productTypeLower = p.productType?.toLowerCase() || '';
 
+        // Exclude first
+        if (config.exclude.some(keyword => titleLower.includes(keyword))) {
+            return false;
+        }
+
         // Match if productType matches OR title contains any keyword
         return productTypeLower === category.productType.toLowerCase() ||
-            categoryKeywords.some(keyword => titleLower.includes(keyword));
+            config.include.some(keyword => titleLower.includes(keyword));
     });
 }
+
 
 
 export async function getAvailableCategories(): Promise<{ slug: string; label: string; count: number }[]> {
