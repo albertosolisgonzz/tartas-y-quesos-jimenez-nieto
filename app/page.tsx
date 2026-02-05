@@ -1,10 +1,8 @@
 import { getAllProducts } from "@/lib/shopify";
 import { ProductGrid } from "@/components/shop/ProductGrid";
-import Link from "next/link";
 import Image from "next/image";
 import { Hero } from "@/components/home/Hero";
-import { FormatsSection } from "@/components/home/FormatsSection";
-import { WhatWeDoSection } from "@/components/home/WhatWeDoSection";
+import { ProductCategoriesSection } from "@/components/home/ProductCategoriesSection";
 import { InnovationBanner } from "@/components/home/InnovationBanner";
 
 export default async function Home() {
@@ -38,11 +36,8 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* What We Do Section */}
-      <WhatWeDoSection />
-
-      {/* Formats Section */}
-      <FormatsSection />
+      {/* Unified Product Categories + Formats Section */}
+      <ProductCategoriesSection />
 
       {/* Innovation Banner */}
       <InnovationBanner />
