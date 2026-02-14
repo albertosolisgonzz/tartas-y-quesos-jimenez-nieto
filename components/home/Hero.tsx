@@ -6,27 +6,17 @@ import { ChevronDown, ArrowRight } from 'lucide-react';
 
 export function Hero() {
     const [isLoaded, setIsLoaded] = useState(false);
-    const [scrollY, setScrollY] = useState(0);
 
     useEffect(() => {
         setIsLoaded(true);
-
-        const handleScroll = () => {
-            setScrollY(window.scrollY);
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const parallaxOffset = scrollY * 0.4;
 
     return (
         <section className="relative h-screen w-full overflow-hidden bg-stone-900 -mt-20">
             {/* Parallax Background */}
             <div
-                className="absolute inset-0 scale-110 transition-transform duration-100"
-                style={{ transform: `translateY(${parallaxOffset}px)` }}
+                className="absolute inset-0 scale-105"
             >
                 <div
                     className="absolute inset-0 bg-cover bg-center"
@@ -44,14 +34,7 @@ export function Hero() {
             {/* Main Content */}
             <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-6">
                 {/* Animated Badge */}
-                <div
-                    className={`transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                        }`}
-                >
-                    <span className="inline-block px-3 py-1 text-[9px] md:text-[11px] tracking-[0.3em] uppercase border border-white/30 text-white/90 rounded-full mb-4 md:mb-6 drop-shadow-md">
-                        Porzuna, Ciudad Real
-                    </span>
-                </div>
+                {/* Animated Badge - Removed */}
 
                 {/* Main Title with staggered animation */}
                 <h1
@@ -68,7 +51,7 @@ export function Hero() {
                         }`}
                 >
                     <p className="text-white/90 text-sm md:text-base max-w-lg mx-auto mb-8 font-light leading-relaxed drop-shadow-md">
-                        Tres generaciones trabajando el ganado, ahora también elaboramos tartas
+                        Tres generaciones de ganadería propia. Ahora, también artesanos de la tarta de queso.
                     </p>
                 </div>
 
