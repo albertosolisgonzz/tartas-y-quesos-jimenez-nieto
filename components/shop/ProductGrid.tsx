@@ -48,7 +48,8 @@ export function ProductGrid({
                     return type.includes('tarta') || title.includes('tarta');
                 }
                 if (activeType === 'quesos') {
-                    return type.includes('queso') || title.includes('queso');
+                    // Excluir "crema" explícitamente para que solo salgan quesos puros
+                    return (type.includes('queso') || title.includes('queso')) && !title.includes('crema') && !type.includes('crema');
                 }
                 return true;
             });

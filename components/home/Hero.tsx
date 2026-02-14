@@ -40,9 +40,6 @@ export function Hero() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90" />
             <div className="absolute inset-0 bg-black/40" /> {/* Increased global darkness by ~20% */}
 
-            {/* Decorative Elements */}
-            <div className="absolute top-1/4 left-8 md:left-16 w-px h-32 bg-gradient-to-b from-transparent via-amber-400/50 to-transparent" />
-            <div className="absolute top-1/3 right-8 md:right-16 w-px h-24 bg-gradient-to-b from-transparent via-stone-400/30 to-transparent" />
 
             {/* Main Content */}
             <div className="relative z-10 h-full flex flex-col items-center justify-center text-center text-white px-6">
@@ -71,7 +68,7 @@ export function Hero() {
                         }`}
                 >
                     <p className="text-white/90 text-sm md:text-base max-w-lg mx-auto mb-8 font-light leading-relaxed drop-shadow-md">
-                        Tres generaciones elaborando quesos y tartas con la pasión de siempre
+                        Tres generaciones trabajando el ganado, ahora también elaboramos tartas
                     </p>
                 </div>
 
