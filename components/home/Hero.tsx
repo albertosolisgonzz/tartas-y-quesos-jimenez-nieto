@@ -42,7 +42,7 @@ export function Hero() {
                         }`}
                 >
                     <span className="block text-white">Sabor</span>
-                    <span className="block text-amber-100 italic">Artesanal</span>
+                    <span className="block text-amber-100 italic px-2 pb-1">Artesanal</span>
                 </h1>
 
                 {/* Subtitle - Clean white text without box */}
