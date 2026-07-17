@@ -2,13 +2,14 @@ import Client from 'shopify-buy';
 
 const domain = process.env.NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN;
 const storefrontAccessToken = process.env.NEXT_PUBLIC_SHOPIFY_STOREFRONT_ACCESS_TOKEN;
+const API_VERSION = '2024-10';
 
-// Only create client if credentials exist
+// Only create client if credentials exist (lo usa el checkout del carrito en el navegador)
 export const shopifyClient = domain && storefrontAccessToken
     ? Client.buildClient({
         domain,
         storefrontAccessToken,
-        apiVersion: '2024-10',
+        apiVersion: API_VERSION,
     })
     : null;
 
@@ -45,55 +46,130 @@ const MOCK_PRODUCTS: NormalizedProduct[] = [
     }
 ];
 
-// Normalize Shopify SDK product to our format
-function normalizeProduct(product: any): NormalizedProduct {
-    return {
-        id: product.id?.toString() || '',
-        title: product.title || '',
-        handle: product.handle || '',
-        description: product.description || product.descriptionHtml || '',
-        productType: product.productType || '',
-        images: product.images?.map((img: any) => ({
-            src: img.src || img.url || ''
-        })) || [],
-        variants: product.variants?.map((v: any) => ({
-            id: v.id?.toString() || '',
-            price: {
-                amount: v.price?.amount || v.priceV2?.amount || v.price || '0',
-                currencyCode: v.price?.currencyCode || v.priceV2?.currencyCode || 'EUR'
+// ——— Storefront GraphQL directo ———
+// Sustituye a shopify-buy para leer productos: la librería fallaba en
+// silencio durante el build de Vercel y la web se generaba con los mocks.
+
+type GqlProduct = {
+    id: string;
+    title: string;
+    handle: string;
+    description: string;
+    productType: string;
+    images: { nodes: { url: string }[] };
+    variants: { nodes: { id: string; price: { amount: string; currencyCode: string } }[] };
+};
+
+const PRODUCT_FIELDS = `
+    id
+    title
+    handle
+    description
+    productType
+    images(first: 10) {
+        nodes {
+            url
+        }
+    }
+    variants(first: 20) {
+        nodes {
+            id
+            price {
+                amount
+                currencyCode
             }
-        })) || []
+        }
+    }
+`;
+
+async function storefrontQuery<T>(query: string, variables?: Record<string, unknown>): Promise<T | null> {
+    if (!domain || !storefrontAccessToken) {
+        return null;
+    }
+
+    try {
+        const response = await fetch(`https://${domain}/api/${API_VERSION}/graphql.json`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Shopify-Storefront-Access-Token': storefrontAccessToken,
+            },
+            body: JSON.stringify({ query, variables }),
+        });
+
+        if (!response.ok) {
+            console.error(`[shopify] Storefront API HTTP ${response.status}`);
+            return null;
+        }
+
+        const json = await response.json();
+        if (json.errors) {
+            console.error('[shopify] Storefront API errors:', JSON.stringify(json.errors));
+            return null;
+        }
+
+        return json.data as T;
+    } catch (error) {
+        console.error('[shopify] Storefront API fetch failed:', error);
+        return null;
+    }
+}
+
+function normalizeGqlProduct(product: GqlProduct): NormalizedProduct {
+    return {
+        id: product.id,
+        title: product.title,
+        handle: product.handle,
+        description: product.description || '',
+        productType: product.productType || '',
+        images: product.images.nodes.map((image) => ({ src: image.url })),
+        variants: product.variants.nodes.map((variant) => ({
+            id: variant.id,
+            price: {
+                amount: variant.price.amount,
+                currencyCode: variant.price.currencyCode,
+            },
+        })),
     };
 }
 
 export async function getAllProducts(): Promise<NormalizedProduct[]> {
-    // Use mock data if no client configured
-    if (!shopifyClient) {
+    const data = await storefrontQuery<{ products: { nodes: GqlProduct[] } }>(`
+        query AllProducts {
+            products(first: 100) {
+                nodes {
+                    ${PRODUCT_FIELDS}
+                }
+            }
+        }
+    `);
+
+    if (!data) {
         return MOCK_PRODUCTS;
     }
 
-    try {
-        const products = await shopifyClient.product.fetchAll();
-        return products.map(normalizeProduct);
-    } catch (error) {
-        console.error('Error fetching products from Shopify:', error);
-        return MOCK_PRODUCTS;
-    }
+    return data.products.nodes.map(normalizeGqlProduct);
 }
 
 
 export async function getProductByHandle(handle: string): Promise<NormalizedProduct | null> {
-    if (!shopifyClient) {
+    if (!domain || !storefrontAccessToken) {
         return MOCK_PRODUCTS.find(p => p.handle === handle) || null;
     }
 
-    try {
-        const product = await shopifyClient.product.fetchByHandle(handle);
-        return product ? normalizeProduct(product) : null;
-    } catch (error) {
-        console.error('Error fetching product:', error);
+    const data = await storefrontQuery<{ product: GqlProduct | null }>(`
+        query ProductByHandle($handle: String!) {
+            product(handle: $handle) {
+                ${PRODUCT_FIELDS}
+            }
+        }
+    `, { handle });
+
+    if (!data) {
         return null;
     }
+
+    return data.product ? normalizeGqlProduct(data.product) : null;
 }
 
 // Available categories for filtering
@@ -159,4 +235,3 @@ export async function getAvailableCategories(): Promise<{ slug: string; label: s
         ).length
     })).filter(cat => cat.count > 0);
 }
-

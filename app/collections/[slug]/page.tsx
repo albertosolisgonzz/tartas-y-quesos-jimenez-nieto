@@ -3,6 +3,9 @@ import { ProductGrid } from '@/components/shop/ProductGrid';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+// Refresca el catálogo cada 5 minutos sin necesidad de redesplegar
+export const revalidate = 300;
+
 interface CollectionPageProps {
     params: Promise<{ slug: string }>;
 }

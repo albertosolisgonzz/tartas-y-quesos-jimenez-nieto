@@ -1,6 +1,9 @@
 import { getAllProducts } from "@/lib/shopify";
 import { ProductCard } from "@/components/shop/ProductCard";
 
+// Refresca el catálogo cada 5 minutos sin necesidad de redesplegar
+export const revalidate = 300;
+
 export const metadata = {
     title: "Todos los Productos | Tartas y Quesos Jimenez Nieto",
     description: "Descubre nuestra selección completa de tartas artesanales y quesos curados de la mejor calidad.",

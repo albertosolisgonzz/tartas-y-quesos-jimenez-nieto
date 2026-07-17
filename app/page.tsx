@@ -5,7 +5,8 @@ import { Hero } from "@/components/home/Hero";
 import { ProductCategoriesSection } from "@/components/home/ProductCategoriesSection";
 import { InnovationBanner } from "@/components/home/InnovationBanner";
 
-
+// Refresca el catálogo cada 5 minutos sin necesidad de redesplegar
+export const revalidate = 300;
 
 export default async function Home() {
   const products = await getAllProducts();
