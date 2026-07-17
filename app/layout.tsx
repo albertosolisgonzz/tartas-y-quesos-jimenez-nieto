@@ -38,7 +38,8 @@ export default function RootLayout({
         <CartProvider>
           <Navbar />
           <CartDrawer />
-          <main className="min-h-screen pt-20">
+          {/* pt = navbar (80px) + banner de promos (36px) */}
+          <main className="min-h-screen pt-[7.25rem]">
             {children}
           </main>
           <Footer />
