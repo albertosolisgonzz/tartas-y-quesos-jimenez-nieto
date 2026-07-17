@@ -3,92 +3,90 @@ import Link from 'next/link';
 const categories = [
     {
         id: 'quesos',
-        title: 'Quesos Manchegos',
-        description: 'Quesos de cabra y oveja con curación tradicional. Servidos en cuñas sin coste adicional.',
-        image: '/images/collage-quesos.png',
-        formats: ['70g', '100g', '300g', '1kg'],
+        title: 'Quesos',
+        description: 'Elaborados con leche cruda y curación tradicional.',
+        formats: ['70g', '100g', '300g', '1kg', 'Cuñas'],
         href: '/collections/quesos',
     },
     {
         id: 'cremas',
         title: 'Cremas Gourmet',
-        description: 'Cremas de queso de cabra y oveja. Sabores exclusivos: trufa, salmón, anchoa.',
-        image: '/images/collage-cremas.png',
+        description: 'Sabores exclusivos: trufa, salmón, anchoa.',
         formats: ['70g', '100g', '300g'],
         href: '/collections/cremas',
     },
     {
         id: 'tartas',
         title: 'Tartas de Queso',
-        description: 'Tartas de queso de cabra artesanales. Perfectas para eventos y celebraciones.',
-        image: '/images/collage-tartas.png',
+        description: 'Tartas artesanales perfectas para eventos.',
         formats: ['Individual', 'Familiar', 'Evento'],
         href: '/collections/tartas',
     },
     {
         id: 'eventos',
         title: 'Eventos',
-        description: 'Mesas de quesos personalizadas, tartas nupciales y catering exclusivo.',
-        image: '/images/collage-eventos.png',
+        description: 'Mesas personalizadas y catering exclusivo.',
         formats: ['Bodas', 'Fiestas', 'Catering'],
         href: '/contact',
-    }
+    },
 ];
 
 export function ProductCategoriesSection() {
     return (
-        <section className="py-12 bg-white">
-            <div className="container mx-auto px-4 md:px-6">
-                {/* Header - Left Aligned to match "Nuestros Productos" */}
-                <div className="mb-8">
-                    <span className="text-stone-400 text-xs font-medium tracking-widest uppercase mb-2 block">
+        <section className="py-16 md:py-24 bg-[#FCFBF9]">
+            <div className="container mx-auto px-4 md:px-6 max-w-5xl">
+                {/* Header */}
+                <div className="mb-10 md:mb-16 text-center">
+                    <span className="text-amber-800/80 text-xs font-semibold tracking-[0.3em] uppercase mb-4 block">
                         Nuestra Producción
                     </span>
-                    <h2 className="font-serif text-3xl md:text-3xl text-stone-900 mb-2">
-                        Formatos para Cada Cliente
+                    <h2 className="font-serif text-3xl md:text-4xl text-stone-900 mb-4 tracking-tight">
+                        Formatos Disponibles
                     </h2>
-                    <p className="text-stone-500 text-sm max-w-lg">
-                        Elaboramos una gama completa de productos lácteos manchegos, disponibles en múltiples formatos.
+                    <p className="text-stone-500 text-sm md:text-base max-w-xl mx-auto font-light leading-relaxed">
+                        Seleccione su formato ideal para casa, hostelería o eventos especiales.
                     </p>
                 </div>
 
-                {/* Grid - 4 Columns */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* Elegant rows */}
+                <div className="flex flex-col border-t border-stone-200">
                     {categories.map((category) => (
                         <Link
                             key={category.id}
                             href={category.href}
-                            className="group block bg-[#F5F5F0] hover:shadow-xl transition-all duration-300 rounded-sm overflow-hidden"
+                            className="group flex flex-col md:flex-row md:items-center justify-between py-6 md:py-8 border-b border-stone-200 hover:bg-stone-50 transition-colors duration-300 px-4 md:px-6 -mx-4 md:mx-0"
                         >
-                            {/* Image Collage on Top */}
-                            <div className="relative aspect-square w-full overflow-hidden">
-                                <div
-                                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                                    style={{ backgroundImage: `url(${category.image})` }}
-                                />
-                            </div>
-
-                            {/* Content */}
-                            <div className="p-6">
-                                <h3 className="font-serif text-xl text-stone-900 mb-2 group-hover:text-amber-800 transition-colors">
+                            {/* Title */}
+                            <div className="flex flex-col md:w-1/3 mb-3 md:mb-0">
+                                <h3 className="font-serif text-2xl md:text-3xl text-stone-900 group-hover:text-amber-800 transition-colors duration-300">
                                     {category.title}
                                 </h3>
+                            </div>
 
-                                <p className="text-stone-500 text-xs leading-relaxed mb-4 min-h-[3em]">
+                            {/* Description */}
+                            <div className="md:w-1/3 mb-4 md:mb-0">
+                                <p className="text-stone-500 text-sm md:text-base font-light">
                                     {category.description}
                                 </p>
+                            </div>
 
-                                {/* Formats pill style */}
-                                <div className="flex flex-wrap gap-2">
+                            {/* Formats + Arrow */}
+                            <div className="md:w-1/3 flex flex-row items-center justify-between md:justify-end gap-6 text-sm">
+                                <div className="flex flex-wrap gap-x-3 gap-y-1 md:justify-end opacity-70">
                                     {category.formats.map((format) => (
                                         <span
                                             key={format}
-                                            className="px-2 py-1 text-[10px] font-medium tracking-wider text-stone-500 bg-white/60 rounded"
+                                            className="text-stone-600 text-xs tracking-wider uppercase font-medium"
                                         >
                                             {format}
                                         </span>
                                     ))}
                                 </div>
+                                <span className="text-stone-300 group-hover:text-amber-700 transition-all duration-300 transform group-hover:translate-x-2">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M5 12h14M12 5l7 7-7 7" />
+                                    </svg>
+                                </span>
                             </div>
                         </Link>
                     ))}

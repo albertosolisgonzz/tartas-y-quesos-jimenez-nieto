@@ -60,3 +60,13 @@ h6 {
 .animate-scale-in {
   animation: scale-in 0.2s ease-out forwards;
 }
+
+/* Hide scrollbar on horizontal tab overflow */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

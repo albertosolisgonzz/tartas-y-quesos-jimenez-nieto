@@ -16,16 +16,17 @@ export default async function Home() {
       <Hero />
 
       {/* Products Section with Filters */}
-      <section className="py-8 md:py-12 bg-white">
+      <section className="py-16 md:py-24 bg-[#FCFBF9]">
         <div className="container mx-auto px-4 md:px-6">
           {/* Section Header */}
-          <div className="mb-6 md:mb-8">
-            <h2 className="font-serif text-2xl md:text-3xl text-stone-900 mb-1">
+          <div className="mb-12 md:mb-16 text-center max-w-2xl mx-auto">
+            <p className="text-stone-400 uppercase tracking-[0.3em] text-xs font-semibold mb-3">
+              Selección Exclusiva
+            </p>
+            <h2 className="font-serif text-3xl md:text-5xl text-[#1A1412] mb-4">
               Nuestros Productos
             </h2>
-            <p className="text-stone-500 text-sm">
-              Haz clic en cualquier producto para comprarlo
-            </p>
+            <div className="w-12 h-[1px] bg-stone-300 mx-auto"></div>
           </div>
 
           {/* Products Grid with Filters - Limited to 4 products */}
@@ -46,16 +47,17 @@ export default async function Home() {
       <InnovationBanner />
 
       {/* Nuestra Tienda - Location Section */}
-      <section className="py-10 md:py-16 bg-stone-50">
+      <section className="py-16 md:py-24 bg-white text-stone-900">
         <div className="container mx-auto px-4 md:px-6">
           {/* Section Header */}
-          <div className="text-center mb-8 md:mb-10">
-            <h2 className="font-serif text-2xl md:text-4xl text-stone-900 mb-2">
+          <div className="text-center mb-12 md:mb-16">
+            <p className="text-stone-400 uppercase tracking-[0.3em] text-xs font-semibold mb-3">
+              Visítanos
+            </p>
+            <h2 className="font-serif text-3xl md:text-5xl text-[#1A1412] mb-4">
               Nuestra Tienda
             </h2>
-            <p className="text-stone-500 text-sm md:text-base">
-              Visítanos en Porzuna, Ciudad Real
-            </p>
+            <div className="w-12 h-[1px] bg-stone-300 mx-auto"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
@@ -75,25 +77,30 @@ export default async function Home() {
             </div>
 
             {/* Foto de la Fachada */}
-            <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-xl shadow-lg bg-stone-200">
+            <div className="relative aspect-[4/3] md:aspect-[16/10] overflow-hidden rounded-sm shadow-xl bg-stone-100 border border-stone-200">
               <Image
                 src="/images/fachada.jpg"
                 alt="Fachada de Jimenez Nieto"
                 fill
-                className="object-cover"
+                className="object-cover opacity-90 hover:opacity-100 transition-opacity duration-500"
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             </div>
           </div>
 
           {/* Address Info */}
-          <div className="mt-6 md:mt-8 text-center">
-            <div className="inline-flex items-center gap-2 text-stone-600">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span className="text-sm md:text-base">Pl. Pilar, 2, 13120 Porzuna, Ciudad Real</span>
+          <div className="mt-10 md:mt-12 text-center">
+            <div className="inline-flex items-center justify-center p-6 border border-stone-200 bg-[#FCFBF9] rounded-sm max-w-xl mx-auto">
+              <div className="flex flex-col md:flex-row items-center gap-4 text-stone-600">
+                <svg className="w-6 h-6 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <div className="text-sm md:text-base tracking-wide font-light text-center md:text-left">
+                  <strong className="block text-[#1A1412] font-medium mb-1">Jimenez Nieto</strong>
+                  Pl. Pilar, 2, 13120 Porzuna, Ciudad Real
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -26,9 +26,8 @@ export function Hero() {
                 />
             </div>
 
-            {/* Gradient Overlays - Clean and darker for better contrast without boxes */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90" />
-            <div className="absolute inset-0 bg-black/40" /> {/* Increased global darkness by ~20% */}
+            {/* Overlay */}
+            <div className="absolute inset-0 bg-black/75" />
 
 
             {/* Main Content */}
@@ -88,10 +87,10 @@ export function Hero() {
             {/* Side Text (Desktop only) */}
             <div className="hidden lg:block absolute left-8 top-1/2 -translate-y-1/2">
                 <span
-                    className="text-[10px] uppercase tracking-[0.3em] text-stone-400 writing-mode-vertical drop-shadow-md"
+                    className="text-[10px] uppercase tracking-[0.3em] text-white writing-mode-vertical drop-shadow-md"
                     style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
                 >
-                    Tradición Familiar
+                    GANADERÍA FAMILIAR
                 </span>
             </div>
         </section>
