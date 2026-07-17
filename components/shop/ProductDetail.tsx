@@ -60,15 +60,21 @@ export function ProductDetail({ product }: ProductDetailProps) {
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+    const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
 
-    const variant = product.variants[0];
+    const variants = product.variants || [];
+    // Con una sola variante «Default Title» no hay nada que elegir
+    const hasVariantChoice = variants.length > 1;
+    const variant = variants[selectedVariantIndex] || variants[0];
     const { description, fichaItems } = parseDescription(product.description || '');
     const images = product.images || [];
 
     const handleAddToCart = () => {
         addToCart({
             id: variant.id || product.id,
-            title: product.title,
+            title: hasVariantChoice
+                ? `${product.title} — ${variant.title}`
+                : product.title,
             price: variant.price.amount,
             currency: variant.price.currencyCode,
             image: product.images[0]?.src,
@@ -125,6 +131,35 @@ export function ProductDetail({ product }: ProductDetailProps) {
                 <p className="text-xl text-stone-800 mb-5 font-medium">
                     {variant.price.amount} {variant.price.currencyCode === 'EUR' ? '€' : variant.price.currencyCode}
                 </p>
+
+                {/* Variant selector (tamaños / formatos) */}
+                {hasVariantChoice && (
+                    <div className="mb-5">
+                        <h3 className="text-[10px] font-bold tracking-[0.2em] text-stone-500 uppercase mb-2.5">
+                            Elige el formato
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                            {variants.map((v: { id: string; title: string; price: { amount: string } }, index: number) => (
+                                <button
+                                    key={v.id}
+                                    onClick={() => setSelectedVariantIndex(index)}
+                                    aria-pressed={selectedVariantIndex === index}
+                                    className={`px-3.5 py-2.5 rounded-sm border text-left transition-all duration-200 ${selectedVariantIndex === index
+                                        ? 'border-stone-900 bg-stone-900 text-white shadow-sm'
+                                        : 'border-stone-200 bg-white text-stone-700 hover:border-stone-400'
+                                        }`}
+                                >
+                                    <span className="block text-[11px] uppercase tracking-[0.08em] font-medium whitespace-nowrap">
+                                        {v.title}
+                                    </span>
+                                    <span className={`block text-xs mt-0.5 ${selectedVariantIndex === index ? 'text-amber-100' : 'text-stone-500'}`}>
+                                        {v.price.amount} €
+                                    </span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Description - more compact */}
                 {description && (

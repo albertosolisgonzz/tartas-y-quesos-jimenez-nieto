@@ -105,6 +105,7 @@ export function ProductGrid({
                         price={product.variants[0]?.price.amount || '0'}
                         currency={product.variants[0]?.price.currencyCode || 'EUR'}
                         images={product.images || []}
+                        fromPrice={(product.variants?.length || 0) > 1}
                     />
                 ))}
             </div>

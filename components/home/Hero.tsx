@@ -40,8 +40,8 @@ export function Hero() {
                     className={`font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl mb-4 leading-[0.9] transition-all duration-1000 delay-500 drop-shadow-lg ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                         }`}
                 >
-                    <span className="block text-white">Sabor</span>
-                    <span className="block text-amber-100 italic px-2 pb-1">Artesanal</span>
+                    <span className="block text-white">Tartas</span>
+                    <span className="block text-amber-100 italic px-2 pb-1">y Quesos</span>
                 </h1>
 
                 {/* Subtitle - Clean white text without box */}
@@ -50,7 +50,8 @@ export function Hero() {
                         }`}
                 >
                     <p className="text-white/90 text-sm md:text-base max-w-lg mx-auto mb-8 font-light leading-relaxed drop-shadow-md">
-                        Tres generaciones de ganadería propia. Ahora, también artesanos de la tarta de queso.
+                        <span className="block">Tres generaciones de ganadería propia.</span>
+                        <span className="block">Ahora, también artesanos de la tarta de queso.</span>
                     </p>
                 </div>
 

@@ -11,9 +11,10 @@ interface ProductCardProps {
     price: string;
     currency: string;
     images: { src: string }[];
+    fromPrice?: boolean;
 }
 
-export function ProductCard({ title, handle, price, currency, images }: ProductCardProps) {
+export function ProductCard({ title, handle, price, currency, images, fromPrice = false }: ProductCardProps) {
     const [isHovered, setIsHovered] = useState(false);
 
     const primaryImage = images?.[0]?.src || '';
@@ -89,7 +90,7 @@ export function ProductCard({ title, handle, price, currency, images }: ProductC
 
                 <div className="text-center px-2">
                     <h3 className="font-serif text-lg md:text-xl text-[#1A1412] mb-2 group-hover:text-stone-500 transition-colors line-clamp-2">{title}</h3>
-                    <p className="text-sm font-medium text-stone-500 tracking-wider font-sans">{price} {currency}</p>
+                    <p className="text-sm font-medium text-stone-500 tracking-wider font-sans">{fromPrice ? 'Desde ' : ''}{price} {currency}</p>
                 </div>
             </Link>
         </div>

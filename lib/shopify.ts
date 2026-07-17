@@ -21,7 +21,7 @@ export type NormalizedProduct = {
     description: string;
     productType: string;
     images: { src: string }[];
-    variants: { id: string; price: { amount: string; currencyCode: string } }[];
+    variants: { id: string; title: string; price: { amount: string; currencyCode: string } }[];
 };
 
 // Mock Data for development without API keys
@@ -33,7 +33,7 @@ const MOCK_PRODUCTS: NormalizedProduct[] = [
         description: 'Nuestra famosa tarta de queso, cremosa y con el tostado perfecto.',
         productType: 'Tartas',
         images: [{ src: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=800' }],
-        variants: [{ id: 'v1', price: { amount: '25.00', currencyCode: 'EUR' } }]
+        variants: [{ id: 'v1', title: 'Default Title', price: { amount: '25.00', currencyCode: 'EUR' } }]
     },
     {
         id: 'gid://shopify/Product/2',
@@ -42,7 +42,7 @@ const MOCK_PRODUCTS: NormalizedProduct[] = [
         description: 'Curación de 12 meses. Sabor intenso y textura firme.',
         productType: 'Quesos',
         images: [{ src: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=800' }],
-        variants: [{ id: 'v2', price: { amount: '18.50', currencyCode: 'EUR' } }]
+        variants: [{ id: 'v2', title: 'Default Title', price: { amount: '18.50', currencyCode: 'EUR' } }]
     }
 ];
 
@@ -57,7 +57,7 @@ type GqlProduct = {
     description: string;
     productType: string;
     images: { nodes: { url: string }[] };
-    variants: { nodes: { id: string; price: { amount: string; currencyCode: string } }[] };
+    variants: { nodes: { id: string; title: string; price: { amount: string; currencyCode: string } }[] };
 };
 
 const PRODUCT_FIELDS = `
@@ -74,6 +74,7 @@ const PRODUCT_FIELDS = `
     variants(first: 20) {
         nodes {
             id
+            title
             price {
                 amount
                 currencyCode
@@ -125,6 +126,7 @@ function normalizeGqlProduct(product: GqlProduct): NormalizedProduct {
         images: product.images.nodes.map((image) => ({ src: image.url })),
         variants: product.variants.nodes.map((variant) => ({
             id: variant.id,
+            title: variant.title,
             price: {
                 amount: variant.price.amount,
                 currencyCode: variant.price.currencyCode,
