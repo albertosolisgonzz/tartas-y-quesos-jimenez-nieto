@@ -80,6 +80,16 @@ export function CartDrawer() {
                                                     <h3 className="font-serif text-stone-900">{item.title}</h3>
                                                     <span className="font-light text-stone-600">{item.price} {item.currency}</span>
                                                 </div>
+                                                {item.customAttributes && item.customAttributes.length > 0 && (
+                                                    <ul className="mb-3 space-y-0.5 text-xs text-stone-500">
+                                                        {item.customAttributes.map((attribute) => (
+                                                            <li key={attribute.key}>
+                                                                <span className="font-medium text-stone-700">{attribute.key}:</span>{' '}
+                                                                {attribute.value}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
                                                 <p className="text-xs text-stone-500 mb-4">Cantidad: {item.quantity}</p>
                                                 <div className="flex items-center justify-between">
                                                     {/* Quantity Controls */}

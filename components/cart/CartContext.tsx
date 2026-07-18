@@ -4,12 +4,14 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { shopifyClient } from '@/lib/shopify';
 
 type CartItem = {
-    id: string; // Variant ID (must be Shopify GID format)
+    id: string; // Identificador único de la línea (incluye la selección si es un pack)
+    variantId?: string; // Variant ID real de Shopify
     title: string;
     price: string;
     currency: string;
     image: string;
     quantity: number;
+    customAttributes?: { key: string; value: string }[];
 };
 
 type CartContextType = {
@@ -32,7 +34,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     const [cart, setCart] = useState<CartItem[]>([]);
     const [isCartOpen, setIsCartOpen] = useState(false);
     const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
-    const [checkoutId, setCheckoutId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
 
     // Load cart from local storage on mount
@@ -65,13 +66,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         setIsCartOpen(true);
         // Reset checkout when cart changes
         setCheckoutUrl(null);
-        setCheckoutId(null);
     };
 
     const removeFromCart = (id: string) => {
         setCart((prev) => prev.filter((i) => i.id !== id));
         setCheckoutUrl(null);
-        setCheckoutId(null);
     };
 
     const updateQuantity = (id: string, quantity: number) => {
@@ -85,7 +84,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             )
         );
         setCheckoutUrl(null);
-        setCheckoutId(null);
     };
 
     const toggleCart = () => setIsCartOpen(!isCartOpen);
@@ -100,8 +98,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             if (shopifyClient) {
                 // Create line items for Shopify checkout
                 const lineItems = cart.map((item) => ({
-                    variantId: item.id,
+                    variantId: item.variantId ?? item.id,
                     quantity: item.quantity,
+                    customAttributes: item.customAttributes,
                 }));
 
                 // Create a new checkout
@@ -112,7 +111,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 // Get the checkout URL
                 const webUrl = checkout.webUrl;
                 setCheckoutUrl(webUrl);
-                setCheckoutId(checkout.id as string);
 
                 // Redirect to Shopify checkout
                 window.location.href = webUrl;
