@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
-import { X, Send } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { X, Send, Smile } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '34646927410';
+
+// Patrón de garabatos sutil, al estilo del fondo de chat de WhatsApp
+const CHAT_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%23d5ccc2' stroke-width='1.2' opacity='0.55'%3E%3Ccircle cx='14' cy='16' r='4'/%3E%3Cpath d='M60 10c3 0 5 2 5 5M38 32l4 4M42 32l-4 4'/%3E%3Ccircle cx='70' cy='46' r='3'/%3E%3Cpath d='M12 58c2-3 6-3 8 0M52 66c0-3 2-5 5-5M24 78l3 3M27 78l-3 3'/%3E%3C/g%3E%3C/svg%3E")`;
 
 export function WhatsAppWidget() {
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
+    const [now, setNow] = useState('');
+
+    useEffect(() => {
+        if (isOpen) {
+            setNow(new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }));
+        }
+    }, [isOpen]);
 
     const handleSendMessage = () => {
         if (!message.trim()) return;
@@ -29,57 +40,90 @@ export function WhatsAppWidget() {
                         zIndex: 9999,
                     }}
                 >
-                    <div className="w-80 bg-white rounded-2xl shadow-2xl overflow-hidden border border-stone-200">
-                        {/* Header */}
-                        <div className="bg-stone-800 text-white p-4">
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-stone-700 flex items-center justify-center">
-                                    <span className="font-serif font-bold">JN</span>
+                    <div className="w-[330px] rounded-2xl shadow-2xl overflow-hidden animate-scale-in origin-bottom-right">
+                        {/* Cabecera estilo WhatsApp */}
+                        <div className="bg-[#008069] text-white px-3 py-2.5">
+                            <div className="flex items-center gap-2.5">
+                                <div className="relative w-10 h-10 rounded-full bg-white overflow-hidden shrink-0 ring-1 ring-black/10">
+                                    <Image
+                                        src="/images/logo-jimenez-nieto.png"
+                                        alt=""
+                                        fill
+                                        className="object-contain p-0.5"
+                                        sizes="40px"
+                                    />
                                 </div>
-                                <div className="flex-1">
-                                    <h3 className="font-serif text-base">Jimenez Nieto</h3>
-                                    <p className="text-xs text-stone-300">Responde rápidamente</p>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-[15px] font-semibold leading-tight truncate">Jiménez Nieto</p>
+                                    <p className="text-xs text-white/80 leading-tight">Cuenta de empresa</p>
                                 </div>
                                 <button
                                     onClick={() => setIsOpen(false)}
-                                    className="p-1.5 hover:bg-stone-700 rounded-full"
+                                    className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                                    aria-label="Cerrar chat"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
                             </div>
                         </div>
 
-                        {/* Chat */}
-                        <div className="p-4 bg-stone-50 min-h-[120px]">
-                            <div className="flex gap-2">
-                                <div className="w-7 h-7 rounded-full bg-stone-800 flex items-center justify-center flex-shrink-0">
-                                    <span className="text-white text-xs font-bold">JN</span>
-                                </div>
-                                <div className="bg-white rounded-xl rounded-tl-sm p-3 shadow-sm border border-stone-200">
-                                    <p className="text-sm text-stone-700">
+                        {/* Conversación */}
+                        <div
+                            className="px-3 pt-3 pb-2 min-h-[190px] bg-[#ECE5DD]"
+                            style={{ backgroundImage: CHAT_PATTERN }}
+                        >
+                            {/* Chip de fecha */}
+                            <div className="flex justify-center mb-3">
+                                <span className="bg-white/95 text-[#54656F] text-[11px] px-2.5 py-1 rounded-md shadow-sm uppercase tracking-wide">
+                                    Hoy
+                                </span>
+                            </div>
+
+                            {/* Mensaje entrante */}
+                            <div className="relative max-w-[85%]">
+                                {/* Pico de la burbuja */}
+                                <svg
+                                    className="absolute -left-[7px] top-0 w-2 h-3 text-white"
+                                    viewBox="0 0 8 12"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M8 0 L0 0 C4 3 6.5 7 8 12 Z" fill="currentColor" transform="scale(-1,1) translate(-8,0)" />
+                                </svg>
+                                <div className="bg-white rounded-lg rounded-tl-none px-3 py-2 shadow-[0_1px_1px_rgba(0,0,0,0.08)]">
+                                    <p className="text-[14px] leading-snug text-[#111B21]">
                                         ¡Hola! 👋 ¿En qué podemos ayudarte?
                                     </p>
+                                    <span className="block text-right text-[10px] text-[#667781] mt-0.5 leading-none">
+                                        {now}
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Input */}
-                        <div className="p-3 bg-white border-t border-stone-200">
-                            <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    value={message}
-                                    onChange={(e) => setMessage(e.target.value)}
-                                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                                    placeholder="Escribe tu mensaje..."
-                                    className="flex-1 bg-stone-100 rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-stone-300"
-                                />
+                        {/* Barra de escritura */}
+                        <div
+                            className="px-2 pb-2 pt-1 bg-[#ECE5DD]"
+                            style={{ backgroundImage: CHAT_PATTERN }}
+                        >
+                            <div className="flex items-end gap-1.5">
+                                <div className="flex-1 flex items-center gap-1.5 bg-white rounded-full pl-2.5 pr-3 py-1">
+                                    <Smile className="w-5 h-5 text-[#8696A0] shrink-0" aria-hidden="true" />
+                                    <input
+                                        type="text"
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                                        placeholder="Escribe un mensaje"
+                                        className="flex-1 min-w-0 bg-transparent py-1.5 text-[14px] text-[#111B21] placeholder:text-[#8696A0] focus:outline-none"
+                                    />
+                                </div>
                                 <button
                                     onClick={handleSendMessage}
                                     disabled={!message.trim()}
-                                    className="w-10 h-10 bg-stone-800 rounded-full flex items-center justify-center text-white hover:bg-stone-700 disabled:opacity-40"
+                                    className="w-10 h-10 shrink-0 bg-[#00A884] rounded-full flex items-center justify-center text-white hover:bg-[#008f70] transition-colors disabled:opacity-60"
+                                    aria-label="Enviar mensaje por WhatsApp"
                                 >
-                                    <Send className="w-4 h-4" />
+                                    <Send className="w-4 h-4 translate-x-[1px]" />
                                 </button>
                             </div>
                         </div>
