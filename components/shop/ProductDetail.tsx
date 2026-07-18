@@ -9,7 +9,7 @@ import type { NormalizedProduct } from '@/lib/shopify';
 
 interface ProductDetailProps {
     product: NormalizedProduct;
-    bundleOptions?: BundleOption[];
+    bundle?: BundleConfig;
 }
 
 export type BundleOption = {
@@ -17,6 +17,17 @@ export type BundleOption = {
     title: string;
     image: { src: string };
 };
+
+export type BundleConfig = {
+    options: BundleOption[];
+    itemSingular: string;
+    itemPlural: string;
+    collageLabel: string;
+};
+
+function capitalize(value: string) {
+    return value.charAt(0).toLocaleUpperCase('es') + value.slice(1);
+}
 
 // Helper function to parse product description into sections
 function parseDescription(text: string) {
@@ -65,13 +76,13 @@ function parseDescription(text: string) {
     return { description, fichaItems };
 }
 
-export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProps) {
+export function ProductDetail({ product, bundle }: ProductDetailProps) {
     const { addToCart } = useCart();
     const [quantity, setQuantity] = useState(1);
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
     const [selectedVariantIndex, setSelectedVariantIndex] = useState(0);
     const [selectedBundleIds, setSelectedBundleIds] = useState<(string | null)[]>([null, null, null]);
-    const [activePortion, setActivePortion] = useState(0);
+    const [activeBundleItem, setActiveBundleItem] = useState(0);
 
     const variants = product.variants || [];
     // Con una sola variante «Default Title» no hay nada que elegir
@@ -79,6 +90,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
     const variant = variants[selectedVariantIndex] || variants[0];
     const { description, fichaItems } = parseDescription(product.description || '');
     const images = product.images || [];
+    const bundleOptions = bundle?.options ?? [];
     const isBundleProduct = bundleOptions.length > 0;
     const selectedBundle = selectedBundleIds.map((id) =>
         bundleOptions.find((option) => option.id === id) ?? null,
@@ -87,14 +99,14 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
 
     const handleBundleSelection = (optionId: string) => {
         const nextSelection = [...selectedBundleIds];
-        nextSelection[activePortion] = optionId;
+        nextSelection[activeBundleItem] = optionId;
         setSelectedBundleIds(nextSelection);
 
-        const nextEmptyPortion = nextSelection.findIndex(
-            (selection, index) => index > activePortion && selection === null,
+        const nextEmptyItem = nextSelection.findIndex(
+            (selection, index) => index > activeBundleItem && selection === null,
         );
-        if (nextEmptyPortion !== -1) {
-            setActivePortion(nextEmptyPortion);
+        if (nextEmptyItem !== -1) {
+            setActiveBundleItem(nextEmptyItem);
         }
     };
 
@@ -103,7 +115,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
 
         const customAttributes = isBundleProduct
             ? selectedBundle.map((option, index) => ({
-                key: `Porción ${index + 1}`,
+                key: `${capitalize(bundle?.itemSingular ?? 'selección')} ${index + 1}`,
                 value: option?.title ?? '',
             }))
             : undefined;
@@ -139,11 +151,11 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                         />
                     ) : isBundleProduct ? (
                         <div
-                            className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-px bg-white"
+                            className={`absolute inset-0 grid gap-px bg-white ${bundleOptions.length > 6 ? 'grid-cols-4 grid-rows-2' : 'grid-cols-3 grid-rows-2'}`}
                             role="img"
-                            aria-label="Los seis sabores de tarta disponibles para el pack"
+                            aria-label={bundle?.collageLabel}
                         >
-                            {bundleOptions.slice(0, 6).map((option, index) => (
+                            {bundleOptions.slice(0, 8).map((option, index) => (
                                 <div key={option.id} className="relative overflow-hidden bg-stone-100">
                                     <Image
                                         src={option.image.src}
@@ -151,7 +163,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                                         fill
                                         priority={index < 3}
                                         className="object-cover"
-                                        sizes="(max-width: 768px) 33vw, 17vw"
+                                        sizes={bundleOptions.length > 6 ? "(max-width: 768px) 25vw, 13vw" : "(max-width: 768px) 33vw, 17vw"}
                                     />
                                     <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-2 pb-2 pt-7 text-center text-[0.58rem] font-bold uppercase tracking-[0.1em] text-white">
                                         {option.title}
@@ -255,7 +267,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                                     Pack personalizado
                                 </p>
                                 <h2 id="bundle-selector-title" className="font-serif text-xl text-stone-900">
-                                    Elige tus 3 porciones
+                                    Elige tus 3 {bundle?.itemPlural}
                                 </h2>
                             </div>
                             <span className="text-xs text-stone-500">
@@ -263,14 +275,14 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                             </span>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-2" aria-label="Porciones del pack">
+                        <div className="grid grid-cols-3 gap-2" aria-label={`${capitalize(bundle?.itemPlural ?? 'selecciones')} del pack`}>
                             {selectedBundle.map((option, index) => {
-                                const isActive = activePortion === index;
+                                const isActive = activeBundleItem === index;
                                 return (
                                     <button
-                                        key={`portion-${index + 1}`}
+                                        key={`bundle-item-${index + 1}`}
                                         type="button"
-                                        onClick={() => setActivePortion(index)}
+                                        onClick={() => setActiveBundleItem(index)}
                                         aria-pressed={isActive}
                                         className={`min-w-0 overflow-hidden rounded-sm border text-left transition-colors ${isActive
                                             ? 'border-stone-900 ring-1 ring-stone-900'
@@ -293,7 +305,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                                             )}
                                         </span>
                                         <span className="block truncate px-2 py-2 text-[0.65rem] font-bold uppercase tracking-[0.08em] text-stone-700">
-                                            {option?.title ?? `Porción ${index + 1}`}
+                                            {option?.title ?? `${capitalize(bundle?.itemSingular ?? 'selección')} ${index + 1}`}
                                         </span>
                                     </button>
                                 );
@@ -301,12 +313,12 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                         </div>
 
                         <p className="mb-3 mt-5 text-xs font-medium text-stone-700" aria-live="polite">
-                            Selecciona el sabor de la porción {activePortion + 1}
+                            Selecciona el sabor de la {bundle?.itemSingular} {activeBundleItem + 1}
                         </p>
 
-                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="group" aria-label={`Sabores para la porción ${activePortion + 1}`}>
+                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3" role="group" aria-label={`Sabores para la ${bundle?.itemSingular} ${activeBundleItem + 1}`}>
                             {bundleOptions.map((option) => {
-                                const isSelected = selectedBundleIds[activePortion] === option.id;
+                                const isSelected = selectedBundleIds[activeBundleItem] === option.id;
                                 return (
                                     <button
                                         key={option.id}
@@ -342,7 +354,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
 
                         {!isBundleComplete && (
                             <p className="mt-3 text-xs text-stone-500">
-                                Completa las tres porciones para añadir el pack a la cesta.
+                                Completa las tres {bundle?.itemPlural} para añadir el pack a la cesta.
                             </p>
                         )}
                     </section>
@@ -383,7 +395,7 @@ export function ProductDetail({ product, bundleOptions = [] }: ProductDetailProp
                         className="flex-1 bg-stone-900 text-white uppercase tracking-widest text-[10px] font-bold py-3 hover:bg-stone-800 transition-colors flex items-center justify-center gap-2 rounded-sm disabled:cursor-not-allowed disabled:bg-stone-300"
                     >
                         <ShoppingBag className="w-4 h-4" />
-                        {isBundleProduct && !isBundleComplete ? 'Elige las 3 porciones' : 'Añadir a la Cesta'}
+                        {isBundleProduct && !isBundleComplete ? `Elige las 3 ${bundle?.itemPlural}` : 'Añadir a la Cesta'}
                     </button>
                 </div>
 
