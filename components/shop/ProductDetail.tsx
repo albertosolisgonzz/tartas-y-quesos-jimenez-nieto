@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useCart } from '../cart/CartContext';
 import { Minus, Plus, ShoppingBag } from 'lucide-react';
+import { PortionIcon, portionFraction } from './PortionIcon';
 
 interface ProductDetailProps {
     product: any;
@@ -139,24 +140,36 @@ export function ProductDetail({ product }: ProductDetailProps) {
                             Elige el formato
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                            {variants.map((v: { id: string; title: string; price: { amount: string } }, index: number) => (
-                                <button
-                                    key={v.id}
-                                    onClick={() => setSelectedVariantIndex(index)}
-                                    aria-pressed={selectedVariantIndex === index}
-                                    className={`px-3.5 py-2.5 rounded-sm border text-left transition-all duration-200 ${selectedVariantIndex === index
-                                        ? 'border-stone-900 bg-stone-900 text-white shadow-sm'
-                                        : 'border-stone-200 bg-white text-stone-700 hover:border-stone-400'
-                                        }`}
-                                >
-                                    <span className="block text-[11px] uppercase tracking-[0.08em] font-medium whitespace-nowrap">
-                                        {v.title}
-                                    </span>
-                                    <span className={`block text-xs mt-0.5 ${selectedVariantIndex === index ? 'text-amber-100' : 'text-stone-500'}`}>
-                                        {v.price.amount} €
-                                    </span>
-                                </button>
-                            ))}
+                            {variants.map((v: { id: string; title: string; price: { amount: string } }, index: number) => {
+                                const isSelected = selectedVariantIndex === index;
+                                const fraction = portionFraction(v.title);
+                                return (
+                                    <button
+                                        key={v.id}
+                                        onClick={() => setSelectedVariantIndex(index)}
+                                        aria-pressed={isSelected}
+                                        className={`px-3.5 py-2.5 rounded-sm border text-left transition-all duration-200 flex items-center gap-2.5 ${isSelected
+                                            ? 'border-stone-900 bg-stone-900 text-white shadow-sm'
+                                            : 'border-stone-200 bg-white text-stone-700 hover:border-stone-400'
+                                            }`}
+                                    >
+                                        {fraction !== null && (
+                                            <PortionIcon
+                                                fraction={fraction}
+                                                className={`w-6 h-6 shrink-0 transition-colors duration-200 ${isSelected ? 'text-amber-200' : 'text-stone-400'}`}
+                                            />
+                                        )}
+                                        <span className="block">
+                                            <span className="block text-[11px] uppercase tracking-[0.08em] font-medium whitespace-nowrap">
+                                                {v.title}
+                                            </span>
+                                            <span className={`block text-xs mt-0.5 ${isSelected ? 'text-amber-100' : 'text-stone-500'}`}>
+                                                {v.price.amount} €
+                                            </span>
+                                        </span>
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
                 )}
