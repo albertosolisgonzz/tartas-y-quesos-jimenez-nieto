@@ -38,8 +38,8 @@ export default function RootLayout({
         <CartProvider>
           <Navbar />
           <CartDrawer />
-          {/* pt = navbar (80px) + banner de promos (36px) */}
-          <main className="min-h-screen pt-[7.25rem]">
+          {/* El padding-top lo gestiona .site-main según haya banner de promos o no */}
+          <main className="min-h-screen site-main">
             {children}
           </main>
           <Footer />

@@ -61,6 +61,16 @@ h6 {
   animation: scale-in 0.2s ease-out forwards;
 }
 
+/* Desplazamiento del contenido bajo la cabecera fija: sin banner de promos
+   solo el navbar (80px); con banner visible, navbar + banner (116px) */
+.site-main {
+  padding-top: 5rem;
+}
+
+html.promo-banner-visible .site-main {
+  padding-top: 7.25rem;
+}
+
 /* Hide scrollbar on horizontal tab overflow */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
