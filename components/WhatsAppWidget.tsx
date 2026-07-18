@@ -6,6 +6,14 @@ import { X, Send, Smile } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '34646927410';
 
+// Respuestas rápidas: al pulsarlas se abre WhatsApp con el mensaje ya escrito
+const QUICK_REPLIES = [
+    'Quiero hacer un pedido 🧀',
+    'Quiero encargar una tarta 🎂',
+    '¿Cuánto tarda el envío?',
+    'Quiero saber más de las promos de 9 €',
+];
+
 // Patrón de garabatos sutil, al estilo del fondo de chat de WhatsApp
 const CHAT_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%23d5ccc2' stroke-width='1.2' opacity='0.55'%3E%3Ccircle cx='14' cy='16' r='4'/%3E%3Cpath d='M60 10c3 0 5 2 5 5M38 32l4 4M42 32l-4 4'/%3E%3Ccircle cx='70' cy='46' r='3'/%3E%3Cpath d='M12 58c2-3 6-3 8 0M52 66c0-3 2-5 5-5M24 78l3 3M27 78l-3 3'/%3E%3C/g%3E%3C/svg%3E")`;
 
@@ -20,13 +28,15 @@ export function WhatsAppWidget() {
         }
     }, [isOpen]);
 
-    const handleSendMessage = () => {
-        if (!message.trim()) return;
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    const openWhatsApp = (text: string) => {
+        if (!text.trim()) return;
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank');
         setMessage('');
         setIsOpen(false);
     };
+
+    const handleSendMessage = () => openWhatsApp(message);
 
     return (
         <>
@@ -69,7 +79,7 @@ export function WhatsAppWidget() {
 
                         {/* Conversación */}
                         <div
-                            className="px-3 pt-3 pb-2 min-h-[190px] bg-[#ECE5DD]"
+                            className="px-3 pt-3 pb-2 h-[340px] bg-[#ECE5DD] flex flex-col overflow-y-auto"
                             style={{ backgroundImage: CHAT_PATTERN }}
                         >
                             {/* Chip de fecha */}
@@ -97,6 +107,19 @@ export function WhatsAppWidget() {
                                         {now}
                                     </span>
                                 </div>
+                            </div>
+
+                            {/* Respuestas rápidas */}
+                            <div className="mt-auto pt-4 flex flex-col items-end gap-1.5">
+                                {QUICK_REPLIES.map((reply) => (
+                                    <button
+                                        key={reply}
+                                        onClick={() => openWhatsApp(reply)}
+                                        className="bg-white text-[#008069] border border-[#00A884]/50 text-[13px] px-3.5 py-1.5 rounded-full shadow-sm hover:bg-[#00A884] hover:text-white hover:border-[#00A884] transition-colors text-left"
+                                    >
+                                        {reply}
+                                    </button>
+                                ))}
                             </div>
                         </div>
 
