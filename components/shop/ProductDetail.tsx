@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useCart } from '../cart/CartContext';
 import { Minus, Plus, ShoppingBag } from 'lucide-react';
-import { PortionIcon, portionFraction } from './PortionIcon';
+import { PortionIcon, TubIcon, formatIllustration } from './PortionIcon';
 
 interface ProductDetailProps {
     product: any;
@@ -142,7 +142,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
                         <div className="flex flex-wrap gap-2">
                             {variants.map((v: { id: string; title: string; price: { amount: string } }, index: number) => {
                                 const isSelected = selectedVariantIndex === index;
-                                const fraction = portionFraction(v.title);
+                                const illustration = formatIllustration(product.title || '', v.title);
                                 return (
                                     <button
                                         key={v.id}
@@ -153,11 +153,18 @@ export function ProductDetail({ product }: ProductDetailProps) {
                                             : 'border-stone-200 bg-white text-stone-700 hover:border-stone-400'
                                             }`}
                                     >
-                                        {fraction !== null && (
-                                            <PortionIcon
-                                                fraction={fraction}
-                                                className={`w-6 h-6 shrink-0 transition-colors duration-200 ${isSelected ? 'text-amber-200' : 'text-stone-400'}`}
-                                            />
+                                        {illustration !== null && (
+                                            illustration.kind === 'portion' ? (
+                                                <PortionIcon
+                                                    fraction={illustration.fraction}
+                                                    className={`w-6 h-6 shrink-0 transition-colors duration-200 ${isSelected ? 'text-amber-200' : 'text-stone-400'}`}
+                                                />
+                                            ) : (
+                                                <TubIcon
+                                                    size={illustration.size}
+                                                    className={`w-6 h-6 shrink-0 transition-colors duration-200 ${isSelected ? 'text-amber-200' : 'text-stone-400'}`}
+                                                />
+                                            )
                                         )}
                                         <span className="block">
                                             <span className="block text-[11px] uppercase tracking-[0.08em] font-medium whitespace-nowrap">
